@@ -3,8 +3,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the main branch
-                git branch: 'main', url: 'https://github.com/VINTAZ80/bookstore-project.git'
+                git branch: 'main',
+                    url: 'https://github.com/VINTAZ80/bookstore-project.git',
+                    credentialsId: 'your-credential-id' // Replace with Jenkins credential ID
             }
         }
         stage('Build') {
