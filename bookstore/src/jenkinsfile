@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Clone your GitHub project
+                git 'https://github.com/VINTAZ80/bookstore-project.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Use Maven to clean and build the project
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run unit tests and display the results
+                sh 'mvn test'
+            }
+        }
+
+        stage('Staging') {
+            steps {
+                // Deploy the application to a staging environment
+                sh './gradlew bootRun -Dspring.profiles.active=staging'
+            }
+        }
+
+        stage('Archive Results') {
+            steps {
+                // Archive the build artifacts and test results
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                junit '**/target/surefire-reports/*.xml'
+            }
+        }
+    }
+
+    post {
+        always {
+            // Notify on build completion
+            echo 'Build and Test Complete!'
+        }
+        success {
+            echo 'The build was successful!'
+        }
+        failure {
+            echo 'The build failed.'
+        }
+    }
+}
