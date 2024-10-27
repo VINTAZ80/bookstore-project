@@ -29,9 +29,19 @@ INSERT INTO BOOKS (id, name, price, authors, isbn, publisher, published_on)
 
 -- USERS
 INSERT INTO USERS (username, password, enabled) 
-	VALUES ('ognjen', '{noop}ognjen', 1);
+	VALUES ('Faisal', '{noop}Faisal', 1);
+
+	
+
+INSERT INTO USERS (username, password, enabled) 
+	VALUES ('Eyad', '{noop}Eyad', 1);
 	
 
 -- AUTHORITIES
 INSERT INTO AUTHORITIES (username, authority) 
-	VALUES ('ognjen', 'ADMIN');
+	VALUES ('Eyad', 'ADMIN');
+
+	
+
+INSERT INTO AUTHORITIES (username, authority) 
+	VALUES ('Faisal', 'ADMIN');
