@@ -4,36 +4,40 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Clone the Git repository
-                git branch: 'main', url: 'https://github.com/VINTAZ80/bookstore-project.git'
+                // Pull the latest code from the repository
+                git 'https://github.com/VINTAZ80/bookstore-project.git'
             }
         }
-
+        
         stage('Build') {
             steps {
-                // Navigate to the correct subdirectory and run Maven
-                dir('bookstore') {  // Change to bookstore directory
-                    sh 'mvn clean install'
-                }
+                // Clean and compile the project using Maven
+                sh './mvnw clean compile'
             }
         }
 
         stage('Test') {
             steps {
-                // Navigate to the correct subdirectory for testing
-                dir('bookstore') {
-                    sh 'mvn test'
-                }
+                // Run tests and fail the build if any test fails
+                sh './mvnw test'
+            }
+        }
+        
+        stage('Package') {
+            steps {
+                // Package the application (Optional: Skip if just testing)
+                sh './mvnw package'
             }
         }
     }
 
     post {
+        // Handle build status: mark as success or failure
         success {
-            echo 'Build and Tests completed successfully!'
+            echo 'Build completed successfully.'
         }
         failure {
-            echo 'Build or Tests failed. Check the logs.'
+            echo 'Build failed! Check the logs to identify test failures.'
         }
     }
 }
