@@ -18,7 +18,7 @@ class BookTest {
             "Craig Walls", 
             "978-1617294945", 
             "Manning", 
-            LocalDate.of(2020, 6, 1)
+            LocalDate.of(21, 6, 1)
         );
 
         // Assert the properties of the Book
