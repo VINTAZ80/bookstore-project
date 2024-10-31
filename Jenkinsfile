@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                // Clone the Git repository
                 git branch: 'main', url: 'https://github.com/VINTAZ80/bookstore-project.git'
             }
         }
@@ -15,7 +16,8 @@ pipeline {
         stage('Build') {
             steps {
                 dir('bookstore') {
-                    sh 'mvn clean install'
+                    // Run Maven build
+                    sh './mvnw clean install'
                 }
             }
         }
@@ -23,7 +25,8 @@ pipeline {
         stage('Test') {
             steps {
                 dir('bookstore') {
-                    sh 'mvn test'
+                    // Run tests
+                    sh './mvnw test'
                 }
             }
         }
@@ -31,13 +34,15 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('bookstore') {
-                    sh '/opt/homebrew/bin/docker build -t bookstore-app .'  // Use absolute path for Docker
+                    // Use absolute path for Docker build command
+                    sh '/opt/homebrew/bin/docker build -t bookstore-app .'
                 }
             }
         }
 
         stage('Docker Run') {
             steps {
+                // Run Docker container
                 sh '/opt/homebrew/bin/docker run -d -p 8080:8080 --name bookstore-app bookstore-app'
             }
         }
@@ -51,6 +56,7 @@ pipeline {
             echo 'Build, Tests, or Docker setup failed. Check the logs.'
         }
         cleanup {
+            // Cleanup Docker container and image
             sh '/opt/homebrew/bin/docker stop bookstore-app || true'
             sh '/opt/homebrew/bin/docker rm bookstore-app || true'
             sh '/opt/homebrew/bin/docker rmi bookstore-app || true'
