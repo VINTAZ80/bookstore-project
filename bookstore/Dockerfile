@@ -5,7 +5,10 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the project files
-COPY .. /app
+COPY . /app
+
+# Install Maven Wrapper if not included
+RUN ./mvnw -v || apt-get update && apt-get install -y maven
 
 # Expose the application port
 EXPOSE 8080
