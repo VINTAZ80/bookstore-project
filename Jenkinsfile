@@ -31,7 +31,7 @@ pipeline {
             steps {
                 // Build Docker image
                 dir('bookstore') {  // Ensure the Dockerfile is in this directory
-                    sh 'sudo docker build -t bookstore-app .'
+                    sh 'docker build -t bookstore-app .'
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
         stage('Docker Run') {
             steps {
                 // Run Docker container
-                sh 'sudo docker run -d -p 8080:8080 --name bookstore-app bookstore-app'
+                sh 'docker run -d -p 8080:8080 --name bookstore-app bookstore-app'
             }
         }
     }
@@ -53,9 +53,9 @@ pipeline {
         }
         cleanup {
             // Stop and remove Docker container and image if they exist
-            sh 'sudo docker stop bookstore-app || true'
-            sh 'sudo docker rm bookstore-app || true'
-            sh 'sudo docker rmi bookstore-app || true'
+            sh 'docker stop bookstore-app || true'
+            sh 'docker rm bookstore-app || true'
+            sh 'docker rmi bookstore-app || true'
         }
     }
 }
