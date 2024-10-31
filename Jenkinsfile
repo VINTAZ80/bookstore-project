@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Navigate to the correct subdirectory and run Maven
-                dir('bookstore') {  // Change to bookstore directory
+                dir('bookstore') {
                     sh 'mvn clean install'
                 }
             }
@@ -29,17 +29,17 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                // Build Docker image
-                dir('bookstore') {  // Ensure the Dockerfile is in this directory
-                    sh 'docker build -t bookstore-app .'
+                // Build Docker image using the full path to Docker
+                dir('bookstore') {
+                    sh '/opt/homebrew/bin/docker build -t bookstore-app .'
                 }
             }
         }
 
         stage('Docker Run') {
             steps {
-                // Run Docker container
-                sh 'docker run -d -p 8080:8080 --name bookstore-app bookstore-app'
+                // Run Docker container using the full path to Docker
+                sh '/opt/homebrew/bin/docker run -d -p 8080:8080 --name bookstore-app bookstore-app'
             }
         }
     }
@@ -52,10 +52,10 @@ pipeline {
             echo 'Build, Tests, or Docker setup failed. Check the logs.'
         }
         cleanup {
-            // Stop and remove Docker container and image if they exist
-            sh 'docker stop bookstore-app || true'
-            sh 'docker rm bookstore-app || true'
-            sh 'docker rmi bookstore-app || true'
+            // Stop and remove Docker container and image if they exist, using full path to Docker
+            sh '/opt/homebrew/bin/docker stop bookstore-app || true'
+            sh '/opt/homebrew/bin/docker rm bookstore-app || true'
+            sh '/opt/homebrew/bin/docker rmi bookstore-app || true'
         }
     }
 }
