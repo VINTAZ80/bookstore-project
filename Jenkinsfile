@@ -27,22 +27,20 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
-            steps {
-                // Build Docker image
-                dir('bookstore') {  // Ensure the Dockerfile is in this directory
-                    sh 'docker build -t bookstore-app .'
-                }
-            }
-        }
-
-        stage('Docker Run') {
-            steps {
-                // Run Docker container
-                sh 'docker run -d -p 8080:8080 --name bookstore-app bookstore-app'
-            }
+     stage('Docker Build') {
+    steps {
+        dir('bookstore') {  // Ensure the Dockerfile is in this directory
+            sh 'sudo docker build -t bookstore-app .'
         }
     }
+}
+
+stage('Docker Run') {
+    steps {
+        sh 'sudo docker run -d -p 8080:8080 --name bookstore-app bookstore-app'
+    }
+}
+
 
     post {
         success {
