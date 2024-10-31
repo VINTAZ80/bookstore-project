@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PATH = "/opt/homebrew/bin:$PATH" // Ensure the PATH is set correctly
+        PATH+EXTRA = "/opt/homebrew/bin"  // Append required paths
     }
 
     stages {
@@ -15,9 +15,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('bookstore') {
-                    // Run Maven build
-                    sh './mvnw clean install'
+                dir('bookstore') {  // Ensure the project directory is correct
+                    sh './mvnw clean install || mvn clean install'  // Tries Maven wrapper, then system Maven
                 }
             }
         }
@@ -25,8 +24,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir('bookstore') {
-                    // Run tests
-                    sh './mvnw test'
+                    sh './mvnw test || mvn test'
                 }
             }
         }
@@ -34,15 +32,13 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('bookstore') {
-                    // Use absolute path for Docker build command
-                    sh '/opt/homebrew/bin/docker build -t bookstore-app .'
+                    sh '/opt/homebrew/bin/docker build -t bookstore-app .'  // Full path to Docker
                 }
             }
         }
 
         stage('Docker Run') {
             steps {
-                // Run Docker container
                 sh '/opt/homebrew/bin/docker run -d -p 8080:8080 --name bookstore-app bookstore-app'
             }
         }
@@ -56,7 +52,6 @@ pipeline {
             echo 'Build, Tests, or Docker setup failed. Check the logs.'
         }
         cleanup {
-            // Cleanup Docker container and image
             sh '/opt/homebrew/bin/docker stop bookstore-app || true'
             sh '/opt/homebrew/bin/docker rm bookstore-app || true'
             sh '/opt/homebrew/bin/docker rmi bookstore-app || true'
