@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PATH = "/opt/homebrew/bin:$PATH" // Ensures /opt/homebrew/bin is in PATH
+        PATH = "/opt/homebrew/bin:$PATH" // Ensure the PATH is set correctly
     }
 
     stages {
@@ -31,7 +31,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('bookstore') {
-                    sh '/opt/homebrew/bin/docker build -t bookstore-app .'
+                    sh '/opt/homebrew/bin/docker build -t bookstore-app .'  // Use absolute path for Docker
                 }
             }
         }
